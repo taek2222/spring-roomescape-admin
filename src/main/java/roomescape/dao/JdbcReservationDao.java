@@ -43,6 +43,7 @@ public class JdbcReservationDao implements ReservationDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
     public List<Reservation> findAll() {
         return jdbcTemplate.query(
                 FIND_ALL_SQL,
@@ -50,6 +51,7 @@ public class JdbcReservationDao implements ReservationDao {
         );
     }
 
+    @Override
     public Reservation save(Reservation reservation) {
         SimpleJdbcInsert jdbcInsert = createJdbcInsert();
         Map<String, Object> params = convertToParams(reservation);
@@ -58,6 +60,7 @@ public class JdbcReservationDao implements ReservationDao {
         return new Reservation(id, reservation);
     }
 
+    @Override
     public boolean deleteById(Long id) {
         int updatedRows = jdbcTemplate.update(DELETE_BY_ID_SQL, id);
         return updatedRows > 0;

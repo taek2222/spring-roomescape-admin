@@ -28,6 +28,7 @@ public class JdbcReservationTimeDao implements ReservationTimeDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
     public List<ReservationTime> findAll() {
         return jdbcTemplate.query(
                 FIND_ALL_SQL,
@@ -35,6 +36,7 @@ public class JdbcReservationTimeDao implements ReservationTimeDao {
         );
     }
 
+    @Override
     public ReservationTime findById(Long id) {
         return jdbcTemplate.queryForObject(
                 FIND_BY_ID_SQL,
@@ -43,6 +45,7 @@ public class JdbcReservationTimeDao implements ReservationTimeDao {
         );
     }
 
+    @Override
     public ReservationTime save(ReservationTime reservationTime) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("reservation_time")
