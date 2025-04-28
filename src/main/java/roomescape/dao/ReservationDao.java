@@ -69,7 +69,7 @@ public class ReservationDao {
                 .usingGeneratedKeyColumns("id");
     }
 
-    private Map<String, Object> convertToParams(final Reservation reservation) {
+    private Map<String, Object> convertToParams(Reservation reservation) {
         return Map.of(
                 "name", reservation.getName(),
                 "date", reservation.getDate(),

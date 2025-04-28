@@ -23,11 +23,11 @@ public class ReservationTime {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final ReservationTime that = (ReservationTime) o;
+        ReservationTime that = (ReservationTime) o;
         return Objects.equals(id, that.id) && Objects.equals(time, that.time);
     }
 
