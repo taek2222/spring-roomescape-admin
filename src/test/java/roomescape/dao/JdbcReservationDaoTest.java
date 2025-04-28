@@ -19,14 +19,14 @@ import roomescape.domain.ReservationTime;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class ReservationDaoTest {
+class JdbcReservationDaoTest {
 
     private static final String TEST_NAME = "TestName";
     private static final LocalDate TEST_DATE = LocalDate.MAX;
     private static final ReservationTime TEST_RESERVATION_TIME = new ReservationTime(1L, LocalTime.MIDNIGHT);
 
     @Autowired
-    private ReservationDao reservationDao;
+    private JdbcReservationDao jdbcReservationDao;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -43,10 +43,10 @@ class ReservationDaoTest {
     @Test
     void 예약_전체를_조회해_반환한다() {
         // given
-        Reservation testReservation = reservationDao.save(createTestReservation());
+        Reservation testReservation = jdbcReservationDao.save(createTestReservation());
 
         // when
-        List<Reservation> findReservations = reservationDao.findAll();
+        List<Reservation> findReservations = jdbcReservationDao.findAll();
         Integer count = getReservationCount();
 
         // then
@@ -65,7 +65,7 @@ class ReservationDaoTest {
         Reservation reservation = createTestReservation();
 
         // when
-        Reservation savedReservation = reservationDao.save(reservation);
+        Reservation savedReservation = jdbcReservationDao.save(reservation);
         Boolean exists = isReservationExists();
 
         // then
@@ -81,11 +81,11 @@ class ReservationDaoTest {
     @Test
     void 예약을_삭제한_데이터가_있는_경우_TRUE를_반환한다() {
         // given
-        Reservation saved = reservationDao.save(createTestReservation());
+        Reservation saved = jdbcReservationDao.save(createTestReservation());
 
         // when
         Boolean beforeExists = isReservationExists();
-        boolean result = reservationDao.deleteById(saved.getId());
+        boolean result = jdbcReservationDao.deleteById(saved.getId());
         Boolean afterExists = isReservationExists();
 
         // then
@@ -98,7 +98,7 @@ class ReservationDaoTest {
     @Test
     void 예약을_삭제한_데이터가_없는_경우_FALSE를_반환한다() {
         // when
-        boolean result = reservationDao.deleteById(1L);
+        boolean result = jdbcReservationDao.deleteById(1L);
         Boolean exists = isReservationExists();
 
         // then

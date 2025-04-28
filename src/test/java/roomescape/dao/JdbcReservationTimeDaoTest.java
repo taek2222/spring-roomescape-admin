@@ -15,10 +15,10 @@ import roomescape.domain.ReservationTime;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class ReservationTimeDaoTest {
+class JdbcReservationTimeDaoTest {
 
     @Autowired
-    private ReservationTimeDao reservationTimeDao;
+    private JdbcReservationTimeDao jdbcReservationTimeDao;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -26,11 +26,11 @@ class ReservationTimeDaoTest {
     @Test
     void 예약_시간_전체를_조회해_반환한다() {
         // given
-        ReservationTime firstReservationTime = reservationTimeDao.save(createTestReservationTime());
-        ReservationTime secondReservationTime = reservationTimeDao.save(createTestReservationTime());
+        ReservationTime firstReservationTime = jdbcReservationTimeDao.save(createTestReservationTime());
+        ReservationTime secondReservationTime = jdbcReservationTimeDao.save(createTestReservationTime());
 
         // when
-        List<ReservationTime> findReservationTimes = reservationTimeDao.findAll();
+        List<ReservationTime> findReservationTimes = jdbcReservationTimeDao.findAll();
         Integer count = getReservationTimeCount();
 
         // then
@@ -47,10 +47,10 @@ class ReservationTimeDaoTest {
     @Test
     void 예약_시간을_조회해_반환한다() {
         // given
-        ReservationTime saved = reservationTimeDao.save(createTestReservationTime());
+        ReservationTime saved = jdbcReservationTimeDao.save(createTestReservationTime());
 
         // when
-        ReservationTime result = reservationTimeDao.findById(1L);
+        ReservationTime result = jdbcReservationTimeDao.findById(1L);
 
         // then
         assertThat(result).isEqualTo(saved);
@@ -62,7 +62,7 @@ class ReservationTimeDaoTest {
         ReservationTime reservationTime = createTestReservationTime();
 
         // when
-        ReservationTime saved = reservationTimeDao.save(reservationTime);
+        ReservationTime saved = jdbcReservationTimeDao.save(reservationTime);
         Boolean exists = isReservationTimeExists();
 
         // then
@@ -76,11 +76,11 @@ class ReservationTimeDaoTest {
     @Test
     void 예약_시간을_삭제한_데이터가_있는_경우_TRUE를_반환한다() {
         // given
-        ReservationTime saved = reservationTimeDao.save(createTestReservationTime());
+        ReservationTime saved = jdbcReservationTimeDao.save(createTestReservationTime());
 
         // when
         Boolean beforeExists = isReservationTimeExists();
-        boolean result = reservationTimeDao.deleteById(saved.getId());
+        boolean result = jdbcReservationTimeDao.deleteById(saved.getId());
         Boolean afterExists = isReservationTimeExists();
 
         // then
@@ -93,7 +93,7 @@ class ReservationTimeDaoTest {
     @Test
     void 예약_시간을_삭제한_데이터가_없는_경우_FALSE를_반환한다() {
         // when
-        boolean result = reservationTimeDao.deleteById(1L);
+        boolean result = jdbcReservationTimeDao.deleteById(1L);
         Boolean exists = isReservationTimeExists();
 
         // then
