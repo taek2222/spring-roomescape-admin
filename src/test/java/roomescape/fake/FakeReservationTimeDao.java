@@ -11,8 +11,8 @@ public class FakeReservationTimeDao implements ReservationTimeDao {
     private final AtomicLong sequence = new AtomicLong();
     private final List<ReservationTime> reservationTimes = new ArrayList<>();
 
-    public FakeReservationTimeDao(List<ReservationTime> reservationTimes) {
-        reservationTimes.forEach(this::save);
+    public FakeReservationTimeDao(ReservationTime reservationTime) {
+        this.save(reservationTime);
     }
 
     @Override
