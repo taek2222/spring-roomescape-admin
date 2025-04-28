@@ -1,6 +1,7 @@
 package roomescape.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -16,16 +17,14 @@ class ReservationTimeServiceTest {
 
     private static final LocalTime DEFAULT_TEST_TIME = LocalTime.MIDNIGHT;
     private static final Long TEST_RESERVATION_ID = 1L;
-    private static final List<ReservationTime> INITIAL_RESERVATION_TIMES = List.of(
-            new ReservationTime(null, DEFAULT_TEST_TIME)
-    );
+    private static final ReservationTime TEST_RESERVATION_TIME = new ReservationTime(null, DEFAULT_TEST_TIME);
 
     private ReservationTimeService reservationTimeService;
     private ReservationTimeDao reservationTimeDao;
 
     @BeforeEach
     void setUp() {
-        reservationTimeDao = new FakeReservationTimeDao(INITIAL_RESERVATION_TIMES);
+        reservationTimeDao = new FakeReservationTimeDao(TEST_RESERVATION_TIME);
         reservationTimeService = new ReservationTimeService(reservationTimeDao);
     }
 
@@ -35,7 +34,10 @@ class ReservationTimeServiceTest {
         List<ReservationTimeResponse> result = reservationTimeService.getReservationTimes();
 
         // then
-        assertThat(result.size()).isEqualTo(INITIAL_RESERVATION_TIMES.size());
+        assertAll(
+                () -> assertThat(result).isNotNull(),
+                () -> assertThat(result).hasSize(1)
+        );
     }
 
     @Test
@@ -52,11 +54,20 @@ class ReservationTimeServiceTest {
     }
 
     @Test
-    void 예약_시간을_삭제한다() {
+    void 예약_시간을_삭제한_경우_TRUE를_반환한다() {
         // when
-        boolean isDeleted = reservationTimeService.deleteReservationTime(TEST_RESERVATION_ID);
+        boolean result = reservationTimeService.deleteReservationTime(TEST_RESERVATION_ID);
 
         // then
-        assertThat(isDeleted).isTrue();
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void 없는_예약_시간을_삭제한_경우_FALSE를_반환한다() {
+        // when
+        boolean result = reservationTimeService.deleteReservationTime(2L);
+
+        // then
+        assertThat(result).isFalse();
     }
 }
